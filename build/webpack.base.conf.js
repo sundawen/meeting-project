@@ -1,3 +1,5 @@
+var webpack = require('webpack')
+
 'use strict'
 const path = require('path')
 const utils = require('./utils')
@@ -11,6 +13,13 @@ function resolve (dir) {
 
 
 module.exports = {
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common.js'),
+    new webpack.ProvidePlugin({
+      jQuery: "jquery",
+      $: "jquery"
+    })
+  ],
   context: path.resolve(__dirname, '../'),
   entry: {
     app: './src/main.js'
@@ -39,6 +48,9 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
+        options: {
+          presets: ['es2015', 'stage-0'],
+        },
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
       {
